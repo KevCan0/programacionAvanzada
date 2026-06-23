@@ -5,7 +5,7 @@
     <base href="/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(()=>{const base=document.querySelector('base');const isGitHubPages=window.location.hostname.endsWith('github.io');const repoName='programacionAvanzada';if(base)base.setAttribute('href',isGitHubPages?('/'+repoName+'/'):'/');document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');})();</script>
+    <script>(() => { const base = document.querySelector('base'); const isGitHubPages = window.location.hostname.endsWith('github.io'); const repoName = 'programacionAvanzada'; if (base) base.setAttribute('href', isGitHubPages ? ('/' + repoName + '/') : '/'); document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark'); })();</script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -51,11 +51,12 @@
                 una <strong>función asíncrona</strong>. Su comportamiento cambia en dos aspectos:
             </p>
             <ul>
-                <li>Siempre devuelve una <strong>Promise</strong>, incluso si el valor de retorno es un dato primitivo.</li>
+                <li>Siempre devuelve una <strong>Promise</strong>, incluso si el valor de retorno es un dato primitivo.
+                </li>
                 <li>Habilita el uso de <code>await</code> dentro de su cuerpo.</li>
             </ul>
             <div class="code-block mt-3">
-<pre><span style="color:var(--text-secondary)">// Función normal — devuelve el número 42</span>
+                <pre><span style="color:var(--text-secondary)">// Función normal — devuelve el número 42</span>
 <span class="json-bool">function</span> <span class="json-key">obtenerValor</span>() {
   <span class="json-bool">return</span> <span class="json-number">42</span>;
 }
@@ -93,7 +94,7 @@
 
             <h3 class="section-subtitle">Con .then() encadenado</h3>
             <div class="code-block mb-4">
-<pre>fetch(<span class="json-string">'https://jsonplaceholder.typicode.com/posts/1'</span>)
+                <pre>fetch(<span class="json-string">'https://jsonplaceholder.typicode.com/posts/1'</span>)
   .then(<span class="json-key">response</span> => {
     <span class="json-bool">if</span> (!response.ok) <span class="json-bool">throw new</span> Error(response.status);
     <span class="json-bool">return</span> response.json();
@@ -108,7 +109,7 @@
 
             <h3 class="section-subtitle">Con async / await</h3>
             <div class="code-block mb-3">
-<pre><span class="json-bool">async function</span> <span class="json-key">obtenerPost</span>() {
+                <pre><span class="json-bool">async function</span> <span class="json-key">obtenerPost</span>() {
   <span class="json-bool">try</span> {
     <span class="json-bool">const</span> response = <span class="json-bool">await</span> fetch(<span class="json-string">'https://jsonplaceholder.typicode.com/posts/1'</span>);
 
@@ -138,7 +139,7 @@ obtenerPost();</pre>
 
             <h3 class="section-subtitle">GET — Leer un recurso</h3>
             <div class="code-block mb-4">
-<pre><span class="json-bool">async function</span> <span class="json-key">obtenerUsuario</span>(<span class="json-key">id</span>) {
+                <pre><span class="json-bool">async function</span> <span class="json-key">obtenerUsuario</span>(<span class="json-key">id</span>) {
   <span class="json-bool">try</span> {
     <span class="json-bool">const</span> response = <span class="json-bool">await</span> fetch(<span class="json-string">`https://jsonplaceholder.typicode.com/users/${id}`</span>);
 
@@ -157,7 +158,7 @@ obtenerUsuario(<span class="json-number">1</span>);</pre>
 
             <h3 class="section-subtitle">POST — Crear un recurso</h3>
             <div class="code-block mb-4">
-<pre><span class="json-bool">async function</span> <span class="json-key">crearPost</span>(<span class="json-key">titulo</span>, <span class="json-key">contenido</span>) {
+                <pre><span class="json-bool">async function</span> <span class="json-key">crearPost</span>(<span class="json-key">titulo</span>, <span class="json-key">contenido</span>) {
   <span class="json-bool">try</span> {
     <span class="json-bool">const</span> response = <span class="json-bool">await</span> fetch(<span class="json-string">'https://jsonplaceholder.typicode.com/posts'</span>, {
       <span class="json-key">method</span>: <span class="json-string">'POST'</span>,
@@ -184,7 +185,7 @@ crearPost(<span class="json-string">'Mi título'</span>, <span class="json-strin
                 todas se resuelvan.
             </p>
             <div class="code-block">
-<pre><span class="json-bool">async function</span> <span class="json-key">obtenerDatos</span>() {
+                <pre><span class="json-bool">async function</span> <span class="json-key">obtenerDatos</span>() {
   <span class="json-bool">try</span> {
     <span style="color:var(--text-secondary)">// Se lanzan las dos peticiones al mismo tiempo</span>
     <span class="json-bool">const</span> [resUsuarios, resPosts] = <span class="json-bool">await</span> Promise.all([
@@ -227,7 +228,8 @@ obtenerDatos();</pre>
                         </tr>
                         <tr>
                             <td><code>try / catch</code></td>
-                            <td>Reemplaza al <code>.catch()</code>; captura errores de red y errores lanzados manualmente.</td>
+                            <td>Reemplaza al <code>.catch()</code>; captura errores de red y errores lanzados
+                                manualmente.</td>
                         </tr>
                         <tr>
                             <td><code>response.ok</code></td>
@@ -235,7 +237,8 @@ obtenerDatos();</pre>
                         </tr>
                         <tr>
                             <td><code>response.json()</code></td>
-                            <td>Parsea el cuerpo de la respuesta como JSON; también es una Promise, por eso necesita <code>await</code>.</td>
+                            <td>Parsea el cuerpo de la respuesta como JSON; también es una Promise, por eso necesita
+                                <code>await</code>.</td>
                         </tr>
                         <tr>
                             <td><code>Promise.all()</code></td>
@@ -245,7 +248,23 @@ obtenerDatos();</pre>
                 </table>
             </div>
         </section>
-
+        <section class="mb-5">
+            <h2>Descargar material</h2>
+            <div class="feature-card d-flex align-items-center gap-4 p-4">
+                <div class="feature-icon flex-shrink-0">
+                    <i class="fa-solid fa-file-zipper"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h3 class="mb-1">async-await.zip</h3>
+                    <p class="mb-0" style="color:var(--text-secondary)">
+                        Archivos de práctica para los ejemplos de esta sección (<code>async/await</code>).
+                    </p>
+                </div>
+                <a href="assets/media/async-await.zip" download="async-await.zip" class="btn btn-primary flex-shrink-0">
+                    <i class="fa-solid fa-download me-2"></i>Descargar
+                </a>
+            </div>
+        </section>
     </div>
 
     <div id="footer-container"></div>
