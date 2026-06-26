@@ -84,14 +84,71 @@ switch ($method) { // Utilizamos la condicional switch-case para evaluar el valo
             echo json_encode(array("mensaje" => "El nombre y la descripción son obligatorios"));
         }
         break;
-    case 'PUT':
+    case 'PUT': // Con PUT hacemos una actualización completa, es decir que tenemos que enviar todos los campos en la petición, esto actualizará todo el registro en la base de datos.
         // Bloque de código con estructura y operaciones para manejar solicitudes PUT
+        // Endpoint para actualizar una categoría existente - http://localhost/gestor_bibliotecario/api/api-categorias.php?id=1
+        if(isset($_GET['id'])){
+            $id = intval($_GET['id']);
+            $data = json_decode(file_get_contents("php://input"), true);
+            $nombre = trim($data['nombre'] ?? "");
+            $descripcion = trim($data['descripcion'] ?? "");
+            if(!empty($nombre)){
+                $stmt = $conn->prepare("UPDATE categorias  SET nombre = ?, descripcion = ? WHERE id = ?");
+                $stmt->bind_param("ssi", $nombre, $descripcion, $id);
+                if($stmt->execute()){
+                    http_response_code(200); // Código HTTP indicando que la solicitud fue exitosa
+                    echo json_encode(array("mensaje" => "Categoría actualizada exitosamente"));
+                }else{
+                    http_response_code(500); // Código HTTP indicando que ocurrió un error en el servidor
+                    echo json_encode(array("mensaje" => "Error al actualizar la categoría " . $stmt->error));
+                }
+            }else{
+                http_response_code(400); // Código HTTP indicando que la solicitud es inválida
+                echo json_encode(array("mensaje" => "El nombre es un campo obligatorio"));
+            }
+        }
         break;
-    case 'PATCH':
+    case 'PATCH': // PATCH es una actualización parcial, es decir que podemos enviar solo los campos que queremos actualizar, esto solo actualizará los campos enviados en la petición, dejando los demás sin cambios en la base de datos.
         // Bloque de código con estructura y operaciones para manejar solicitudes PATCH
+        if(isset($_GET['id'])){
+            $id = intval($_GET['id']);
+            $data = json_decode(file_get_contents("php://input"), true);
+            $nombre = trim($data['nombre'] ?? "");
+            $descripcion = trim($data['descripcion'] ?? "");
+            if(!empty($nombre) || !empty($descripcion)){
+                $stmt = $conn->prepare("UPDATE categorias SET nombre = COALESCE(NULLIF(?, ''), nombre), descripcion = COALESCE(NULLIF(?, ''), descripcion) WHERE id = ?"); // En nuestra consulta preparada, utilizamos la función COALESCE() para actualizar solo los campos que no estén vacíos. La función NULLIF() se utiliza para convertir una cadena vacía en NULL, de modo que COALESCE() pueda seleccionar el valor existente en la base de datos si el nuevo valor es una cadena vacía.
+                $stmt->bind_param("ssi", $nombre, $descripcion, $id);
+                if($stmt->execute()){
+                    http_response_code(200); // Código HTTP indicando que la solicitud fue exitosa
+                    echo json_encode(array("mensaje" => "Categoría actualizada exitosamente"));
+                }else{
+                    http_response_code(500); // Código HTTP indicando que ocurrió un error en el servidor
+                    echo json_encode(array("mensaje" => "Error al actualizar la categoría " . $stmt->error));
+                }
+            }else{
+                http_response_code(400); // Código HTTP indicando que la solicitud es inválida
+                echo json_encode(array("mensaje" => "Al menos un campo es obligatorio para actualizar la categoría"));
+            }
+        }
         break;
     case 'DELETE':
         // Bloque de código con estructura y operaciones para manejar solicitudes DELETE
+        // Endpoint para eliminar un id - http://localhost/gestor_bibliotecario/api/api-categorias.php?id=1
+        if(isset($_GET['id'])){
+            $id = intval($_GET['id']);
+            $stmt = $conn->prepare("DELETE FROM categorias WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            if($stmt->execute()){
+                http_response_code(200); // Código HTTP indicando que la solicitud fue exitosa
+                echo json_encode(array("mensaje" => "Categoría eliminada exitosamente"));
+            }else{
+                http_response_code(500); // Código HTTP indicando que ocurrió un error interno en el servidor
+                echo json_encode(array("mensajae" => "Error al eliminar la categoría " . $stmt->error));
+            }
+        }else{
+            http_response_code(400); // Código HTTP indicando que la solicitud es inválida
+            echo json_encode(array("mensaje" => "El id es obligatorio para eliminar una categoría"));
+        }
         break;
     default:
         // Mensajito por si no cae en ninguna de los casos anteriores
